@@ -15,3 +15,10 @@ services:
       - 127.0.0.1:8080:80
     volumes:
       - ./gdal/:/home/site/wwwroot/
+  minio:
+    build:
+      context: minio/.
+    volumes:
+      - ./minio/:/home/site/wwwroot/
+    ports:
+      - 127.0.0.1:8081:80

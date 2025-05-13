@@ -1,0 +1,27 @@
+{
+  "name": "@nycplanning/data-flow-minio-client",
+  "version": "0.1.0",
+  "description": "MinIO portions of data flow",
+  "main": "dist/src/functions/*.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rimraf dist",
+    "prestart": "npm run clean && npm run build",
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0",
+    "execa": "^9.5.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.46",
+    "azure-functions-core-tools": "^4.x",
+    "rimraf": "^5.0.0",
+    "typescript": "^4.0.0"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
