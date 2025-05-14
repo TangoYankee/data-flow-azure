@@ -11,3 +11,11 @@ curl --header "Content-Type: application/json" \
   --data '{"skipDependencies": false, "skipDependents": false, "skipTiles": false, "skipDownloads": false}' \
   http://localhost:8080/api/boroughs
 ```
+
+## Configuration
+
+```sh
+curl --header "Content-Type: application/json" \
+  --request PUT \
+  http://localhost:8080/api/configuration
+```
