@@ -47,5 +47,9 @@ __blobstorage__
 __queuestorage__
 __azurite_db*__.json
 
+# Build artifacts
+artifacts/*
+!artifacts/.gitkeep
+
 # editor tooling
 .vscode

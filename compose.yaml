@@ -1,24 +1,36 @@
 services:
-  postgis:
+  common:
     build:
-      context: postgis/.
-    environment:
-      - POSTGRES_USER=${FLOW_DATABASE_USER}
-      - POSTGRES_PASSWORD=${FLOW_DATABASE_PASSWORD}
-      - POSTGRES_DB=${FLOW_DATABASE_NAME}
-    ports:
-      - $FLOW_DATABASE_PORT:5432
-  gdal:
-    build:
-      context: gdal/.
+      context: common/.
     ports:
       - 127.0.0.1:8080:80
+    environment:
+      - DO_SPACES_ENDPOINT=${DO_SPACES_ENDPOINT}
+      - DO_SPACES_ACCESS_KEY=${DO_SPACES_ACCESS_KEY}
+      - DO_SPACES_SECRET_KEY=${DO_SPACES_SECRET_KEY}
     volumes:
-      - ./gdal/:/home/site/wwwroot/
-  minio:
-    build:
-      context: minio/.
-    volumes:
-      - ./minio/:/home/site/wwwroot/
-    ports:
-      - 127.0.0.1:8081:80
+      - ./common/:/home/site/wwwroot/
+      - ./artifacts/:/home/artifacts/
+  # postgis:
+  #   build:
+  #     context: postgis/.
+  #   environment:
+  #     - POSTGRES_USER=${FLOW_DATABASE_USER}
+  #     - POSTGRES_PASSWORD=${FLOW_DATABASE_PASSWORD}
+  #     - POSTGRES_DB=${FLOW_DATABASE_NAME}
+  #   ports:
+  #     - $FLOW_DATABASE_PORT:5432
+  # gdal:
+  #   build:
+  #     context: gdal/.
+  #   ports:
+  #     - 127.0.0.1:8081:80
+  #   volumes:
+  #     - ./gdal/:/home/site/wwwroot/
+  # minio:
+  #   build:
+  #     context: minio/.
+  #   volumes:
+  #     - ./minio/:/home/site/wwwroot/
+  #   ports:
+  #     - 127.0.0.1:8082:80
