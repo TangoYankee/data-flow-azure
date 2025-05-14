@@ -22,6 +22,9 @@ export async function boroughs(request: HttpRequest, context: InvocationContext)
     console.debug("skipped boroughs download")
   }
 
+  const { stdout } = await $("src/scripts/boroughs/create_source_table.sh");
+  context.log('PG_CONNECTION', stdout)
+
   return { body: "boroughs loaded successfully\n" };
 };
 

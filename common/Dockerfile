@@ -13,9 +13,12 @@ RUN curl https://dl.min.io/client/mc/release/linux-amd64/mc \
 RUN chmod +x $HOME/minio-binaries/mc
 ENV PATH "$PATH:$HOME/minio-binaries/"
 
-# GDAL
 RUN apt-get update
+# GDAL
 RUN apt-get install gdal-bin -y
+
+## Psql client
+RUN apt-get install -y postgresql-client
 
 # Directory for build artifacts
 RUN mkdir ~/artifacts
