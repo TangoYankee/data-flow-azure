@@ -2,7 +2,7 @@ import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/fu
 import { $ } from "execa";
 import { DomainTree } from "../utils/types";
 import { buildOptionsSchema } from "../utils/zod-schemas";
-import { ogr2ogrTemplatePath, psqlTemplatePath } from "../utils/ constants";
+import { baseScriptsPath, flowOgrPgConnection, flowPsqlPgConnection } from "../utils/ constants";
 
 const boroughDomainTree: DomainTree = {
   boroughs: {
@@ -11,7 +11,7 @@ const boroughDomainTree: DomainTree = {
   }
 }
 
-const baseDomainPath = "src/scripts/boroughs";
+const boroughScriptsPath = `${baseScriptsPath}/boroughs`;
 const artifactSubPath = "sources";
 
 export async function boroughs(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
@@ -20,18 +20,18 @@ export async function boroughs(request: HttpRequest, context: InvocationContext)
   const buildOptions = buildOptionsSchema.parse(await request.json());
   if (buildOptions.skipDownloads !== true) {
     console.debug("download boroughs source")
-    await $(`${baseDomainPath}/download_source.sh`);
+    await $(`${boroughScriptsPath}/download_source.sh`);
   } else {
     console.debug("skipped boroughs download")
   }
 
-  const { stdout: ogrResult } = await $({ env: { SOURCE_DATA_FILE: `${artifactSubPath}/dcp_borough_boundary.shp.zip` } })(ogr2ogrTemplatePath);
+  const { stdout: ogrResult } = await $({ env: { PG_CONNECTION: flowOgrPgConnection } })(`${boroughScriptsPath}/load_source.sh`);
   context.log("ogrResult", ogrResult);
-  const { stdout: sourceValidationResult } = await $({ env: { SQL_FILE: `${baseDomainPath}/create_source_validation.sql` } })(psqlTemplatePath);
+  const { stdout: sourceValidationResult } = await $({ env: { PG_CONNECTION: flowPsqlPgConnection, SCRIPTS_PATH: boroughScriptsPath } })(`${boroughScriptsPath}/validate_source.sh`);
   context.log("sourceValidationResult", sourceValidationResult)
-  const { stdout: targetCreateResult } = await $({ env: { SQL_FILE: `${baseDomainPath}/tmp_create_model.sql` } })(psqlTemplatePath);
+  const { stdout: targetCreateResult } = await $({ env: { PG_CONNECTION: flowPsqlPgConnection, SCRIPTS_PATH: boroughScriptsPath } })(`${boroughScriptsPath}/tmp_create_model.sh`);
   context.log("targetCreateResult", targetCreateResult);
-  const { stdout: populateTargetResult } = await $({ env: { SQL_FILE: `${baseDomainPath}/populate_model.sql` } })(psqlTemplatePath);
+  const { stdout: populateTargetResult } = await $({ env: { PG_CONNECTION: flowPsqlPgConnection, SCRIPTS_PATH: boroughScriptsPath } })(`${boroughScriptsPath}/populate_model.sh`);
   context.log("populate_target", populateTargetResult);
 
   return { body: `boroughs finished\n` };

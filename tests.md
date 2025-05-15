@@ -17,5 +17,5 @@ curl --header "Content-Type: application/json" \
 ```sh
 curl --header "Content-Type: application/json" \
   --request PUT \
-  http://localhost:8080/api/configuration
+  http://localhost:8080/api/configurations
 ```

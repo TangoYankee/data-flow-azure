@@ -21,7 +21,11 @@ RUN apt-get install gdal-bin -y
 RUN apt-get install -y postgresql-client
 
 # Directory for build artifacts
-RUN mkdir ~/artifacts
+RUN mkdir $HOME/artifacts
+RUN mkdir $HOME/artifacts/sources
+RUN mkdir $HOME/artifacts/models
+RUN mkdir $HOME/artifacts/tiles
+RUN mkdir $HOME/artifacts/tmp_tiles
 
 # Azure function setup
 WORKDIR /home/site/wwwroot

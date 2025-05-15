@@ -8,21 +8,22 @@ services:
       - DO_SPACES_ENDPOINT=${DO_SPACES_ENDPOINT}
       - DO_SPACES_ACCESS_KEY=${DO_SPACES_ACCESS_KEY}
       - DO_SPACES_SECRET_KEY=${DO_SPACES_SECRET_KEY}
-      - FLOW_DATABASE_USER=${FLOW_DATABASE_USER}
-      - FLOW_DATABASE_PASSWORD=${FLOW_DATABASE_PASSWORD}
-      - FLOW_DATABASE_NAME=${FLOW_DATABASE_NAME}
-      - FLOW_DATABASE_PORT=${FLOW_DATABASE_PORT}
+      - FLOW_DB_USER=${FLOW_DB_USER}
+      - FLOW_DB_PASSWORD=${FLOW_DB_PASSWORD}
+      - FLOW_DB_NAME=${FLOW_DB_NAME}
+      - FLOW_DB_PORT=${FLOW_DB_PORT}
+      - FLOW_DB_HOST=${FLOW_DB_HOST}
     volumes:
       - ./common/:/home/site/wwwroot/
       - ./artifacts/:/home/artifacts/
     links:
-      - postgis:data-flow-db
+      - postgis:$FLOW_DB_HOST
   postgis:
     build:
       context: postgis/.
     environment:
-      - POSTGRES_USER=${FLOW_DATABASE_USER}
-      - POSTGRES_PASSWORD=${FLOW_DATABASE_PASSWORD}
-      - POSTGRES_DB=${FLOW_DATABASE_NAME}
+      - POSTGRES_USER=${FLOW_DB_USER}
+      - POSTGRES_PASSWORD=${FLOW_DB_PASSWORD}
+      - POSTGRES_DB=${FLOW_DB_NAME}
     ports:
-      - $FLOW_DATABASE_PORT:5432
+      - 8001:5432
