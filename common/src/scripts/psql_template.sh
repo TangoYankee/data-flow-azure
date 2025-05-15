@@ -1,10 +1,10 @@
 #! /bin/sh
 
-PGPASSWORD=$FLOW_POSTGRES_PASSWORD \
+PGPASSWORD=$FLOW_DATABASE_PASSWORD \
 psql \
-    --host='data-flow-azure-postgis-1' \
+    --host='data-flow-db' \
     --port=5432 \
-    -U $FLOW_POSTGRES_USER \
-    -d $FLOW_POSTGRES_DB \
+    -U $FLOW_DATABASE_USER \
+    -d $FLOW_DATABASE_NAME \
     --single-transaction \
     --file $SQL_FILE

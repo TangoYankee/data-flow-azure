@@ -8,13 +8,15 @@ services:
       - DO_SPACES_ENDPOINT=${DO_SPACES_ENDPOINT}
       - DO_SPACES_ACCESS_KEY=${DO_SPACES_ACCESS_KEY}
       - DO_SPACES_SECRET_KEY=${DO_SPACES_SECRET_KEY}
-      - FLOW_POSTGRES_USER=${FLOW_DATABASE_USER}
-      - FLOW_POSTGRES_PASSWORD=${FLOW_DATABASE_PASSWORD}
-      - FLOW_POSTGRES_DB=${FLOW_DATABASE_NAME}
+      - FLOW_DATABASE_USER=${FLOW_DATABASE_USER}
+      - FLOW_DATABASE_PASSWORD=${FLOW_DATABASE_PASSWORD}
+      - FLOW_DATABASE_NAME=${FLOW_DATABASE_NAME}
       - FLOW_DATABASE_PORT=${FLOW_DATABASE_PORT}
     volumes:
       - ./common/:/home/site/wwwroot/
       - ./artifacts/:/home/artifacts/
+    links:
+      - postgis:data-flow-db
   postgis:
     build:
       context: postgis/.
@@ -24,17 +26,3 @@ services:
       - POSTGRES_DB=${FLOW_DATABASE_NAME}
     ports:
       - $FLOW_DATABASE_PORT:5432
-  # gdal:
-  #   build:
-  #     context: gdal/.
-  #   ports:
-  #     - 127.0.0.1:8081:80
-  #   volumes:
-  #     - ./gdal/:/home/site/wwwroot/
-  # minio:
-  #   build:
-  #     context: minio/.
-  #   volumes:
-  #     - ./minio/:/home/site/wwwroot/
-  #   ports:
-  #     - 127.0.0.1:8082:80
